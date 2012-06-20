@@ -1,0 +1,22 @@
+body {
+	background-image:url('img/olive.jpg');
+	background-repeat:no-repeat;
+	background-attachment: fixed;
+	background-position: right bottom;
+}
+
+.bottomright {
+	position:absolute;
+	bottom: 0px;
+	right: 0px;
+}
+
+.hideme {
+	opacity:0.3;
+	filter:alpha(opacity=30); /* For IE8 and earlier */
+}
+
+.hideme:hover {
+	opacity: 1.0;
+	filter:alpha(opacity=100); /* For IE8 and earlier */
+}

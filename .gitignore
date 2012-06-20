@@ -1,0 +1,12 @@
+.project
+.metadata
+.classpath
+.settings
+local.properties
+target
+gen
+bin
+tmp
+
+# Locally stored "Eclipse launch configurations"
+*.launch
