@@ -56,6 +56,8 @@ public class Olive {
 	 */
 	private void startServer() {
 		Spark.setPort(settings.getPort());
+		Spark.staticFileRoute("/static");
+		
 		Spark.get(new Route("/") {
 			@Override
 			public Object handle(Request request, Response response) {

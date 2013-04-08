@@ -76,34 +76,36 @@ public class JobTrackerInterface {
 		try {
 			JobClient client = new JobClient(new JobConf());
 			JobStatus[] jobStatuses = client.getAllJobs();
-			for (JobStatus jobStatus : jobStatuses) {
-	
-				long lastTaskEndTime = 0L;
-	
-				int mapsCompleted = 0;
-				TaskReport[] mapReports = client.getMapTaskReports(jobStatus.getJobID());
-				for (TaskReport r : mapReports) {
-					if(r.getCurrentStatus() == TIPStatus.COMPLETE) mapsCompleted++;
-					if (lastTaskEndTime < r.getFinishTime()) {
-						lastTaskEndTime = r.getFinishTime();
+			if(jobStatuses != null) {
+				for (JobStatus jobStatus : jobStatuses) {
+		
+					long lastTaskEndTime = 0L;
+		
+					int mapsCompleted = 0;
+					TaskReport[] mapReports = client.getMapTaskReports(jobStatus.getJobID());
+					for (TaskReport r : mapReports) {
+						if(r.getCurrentStatus() == TIPStatus.COMPLETE) mapsCompleted++;
+						if (lastTaskEndTime < r.getFinishTime()) {
+							lastTaskEndTime = r.getFinishTime();
+						}
 					}
-				}
-	
-				int reducesCompleted = 0;
-				TaskReport[] reduceReports = client.getReduceTaskReports(jobStatus.getJobID());
-				for (TaskReport r : reduceReports) {
-					if(r.getCurrentStatus() == TIPStatus.COMPLETE) reducesCompleted++;
-					if (lastTaskEndTime < r.getFinishTime()) {
-						lastTaskEndTime = r.getFinishTime();
+		
+					int reducesCompleted = 0;
+					TaskReport[] reduceReports = client.getReduceTaskReports(jobStatus.getJobID());
+					for (TaskReport r : reduceReports) {
+						if(r.getCurrentStatus() == TIPStatus.COMPLETE) reducesCompleted++;
+						if (lastTaskEndTime < r.getFinishTime()) {
+							lastTaskEndTime = r.getFinishTime();
+						}
 					}
+					
+					String jobName = client.getJob(jobStatus.getJobID()).getJobName();
+					String jobTrackingUrl = client.getJob(jobStatus.getJobID()).getTrackingURL();
+					
+					result.add(new Job(jobStatus.getJobID().toString(), jobTrackingUrl, jobName, jobStatus.getUsername(), jobStatus.getRunState(), jobStatus.isJobComplete(), 
+							jobStatus.mapProgress(), jobStatus.reduceProgress(), mapsCompleted, mapReports.length, reducesCompleted, reduceReports.length,
+							jobStatus.getStartTime(), lastTaskEndTime == 0 ? 0: lastTaskEndTime - jobStatus.getStartTime()));
 				}
-				
-				String jobName = client.getJob(jobStatus.getJobID()).getJobName();
-				String jobTrackingUrl = client.getJob(jobStatus.getJobID()).getTrackingURL();
-				
-				result.add(new Job(jobStatus.getJobID().toString(), jobTrackingUrl, jobName, jobStatus.getUsername(), jobStatus.getRunState(), jobStatus.isJobComplete(), 
-						jobStatus.mapProgress(), jobStatus.reduceProgress(), mapsCompleted, mapReports.length, reducesCompleted, reduceReports.length,
-						jobStatus.getStartTime(), lastTaskEndTime == 0 ? 0: lastTaskEndTime - jobStatus.getStartTime()));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

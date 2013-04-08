@@ -17,7 +17,7 @@
 	<repositories>
 		<repository>
 			<id>Spark repository</id>
-			<url>http://www.sparkjava.com/nexus/content/repositories/spark/</url>
+			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
 		</repository>
 	</repositories>
 
@@ -40,9 +40,9 @@
 			<version>1.25</version>
 		</dependency>
 		<dependency>
-			<groupId>spark</groupId>
-			<artifactId>spark</artifactId>
-			<version>0.9.9.3-SNAPSHOT</version>
+			<groupId>com.sparkjava</groupId>
+			<artifactId>spark-core</artifactId>
+			<version>0.9.9.6-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>servlets.com</groupId>
